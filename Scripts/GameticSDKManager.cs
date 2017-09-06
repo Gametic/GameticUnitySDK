@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine.SceneManagement;
+using System.Collections;
 
 namespace Gametic
 {
@@ -18,22 +18,16 @@ namespace Gametic
 		private string userId;
 		private static bool sessionSentOnce;
 
+		public int activationRequiredMinutes = 20;
+
 		private void Awake(){
 			instance = this;
 			requestManager = GetComponent<GameticRequestManager>();
 			DontDestroyOnLoad(this);
 		}
 
-		[MenuItem("GameObject/Gametic/Add SDK Manager", false, 10)]
-		static void InitManager() {
-			GameObject manager = new GameObject("GameticSDKManager");
-			manager.AddComponent<GameticSDKManager> ();
-		}
-
-
 		private void Start()
 		{
-
 			if (developerID == ""){
 				Debug.LogError("Gametic: developerID should has correct value");
 				return;
@@ -62,14 +56,17 @@ namespace Gametic
 			};
 
 			SendSegment("#Version", Application.version);
+
+			CheckActivationSegment();
 			#endif
 		}
 			
+// 		When SceneManager.activeSceneChanged is unavailable
 //		public void OnLevelWasLoaded(){
 //			SendEventReq("#SceneChanged", new Dictionary<string, object>(), true);
 //		}
 
-		#region default events
+		#region defaults
 		private void NewUser(){
 			JSONObject json = new JSONObject();
 			json.AddField("developer_id", developerID);
@@ -85,6 +82,18 @@ namespace Gametic
 
 		private void NewSession(){
 			SendEventReq("#NewSession", new Dictionary<string, object>(), true);
+		}
+
+		private void CheckActivationSegment(){
+			if (!PlayerPrefs.HasKey ("GameticActivationSegment")) {
+				StartCoroutine (TrackActivationSegment());
+			}
+		}
+			
+		private IEnumerator TrackActivationSegment(){
+			yield return new WaitForSeconds (60*activationRequiredMinutes);
+			SendSegment ("#Activation", "Activated", true);
+			PlayerPrefs.SetInt ("GameticActivationSegment", 1);
 		}
 		#endregion
 
@@ -166,8 +175,7 @@ namespace Gametic
 			}catch{}
 			#endif
 		}
-		#endregion
-
+			
 		public void SendPurchase(string market, int value, bool tryAgainInCaseOfError = true){
 			try{
 				Dictionary<string, object> parameters = new Dictionary<string, object>();
@@ -187,6 +195,7 @@ namespace Gametic
 			}catch{}
 			#endif
 		}
+		#endregion
 
 	}
 }

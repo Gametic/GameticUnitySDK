@@ -7,14 +7,11 @@ namespace Gametic
 	public class GameticRequestManager : MonoBehaviour
 	{
 		[HideInInspector]
-		//public string baseUrl = "http://api.gametic.ir";
-		public string baseUrl = "http://localhost";
+		public string baseUrl = "http://api.gametic.ir";
 		[HideInInspector]
-		//public int port = 80;
 		public int port = 4223;
 		public void Post(string uri, JSONObject json, bool tryAgainInCaseOfError, System.Action<JSONObject> callback = null)
 		{
-
 			string url = baseUrl + ":" + port + "/" + uri;
 
 			var encoding = new System.Text.UTF8Encoding();
