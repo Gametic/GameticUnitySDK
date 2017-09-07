@@ -55,9 +55,8 @@ namespace Gametic
 				SendEventReq("#SceneChanged", parameters, true);
 			};
 
-			SendSegment("#Version", Application.version);
+			SendDefaultSegments();
 
-			CheckActivationSegment();
 			#endif
 		}
 			
@@ -84,16 +83,22 @@ namespace Gametic
 			SendEventReq("#NewSession", new Dictionary<string, object>(), true);
 		}
 
+		private void SendDefaultSegments(){
+			SendSegment("#Version", Application.version);
+			SendSegment("#Platform", Application.platform.ToString());
+			CheckActivationSegment();
+		}
+
 		private void CheckActivationSegment(){
-			if (!PlayerPrefs.HasKey ("GameticActivationSegment")) {
+			//if (!PlayerPrefs.HasKey ("GameticActivationSegment")) {
 				StartCoroutine (TrackActivationSegment());
-			}
+			//}
 		}
 			
 		private IEnumerator TrackActivationSegment(){
 			yield return new WaitForSeconds (60*activationRequiredMinutes);
 			SendSegment ("#Activation", "Activated", true);
-			PlayerPrefs.SetInt ("GameticActivationSegment", 1);
+			//PlayerPrefs.SetInt ("GameticActivationSegment", 1);
 		}
 		#endregion
 

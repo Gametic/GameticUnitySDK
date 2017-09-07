@@ -4,6 +4,9 @@ The Gametic SDK for tracking event in Unity.
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
+**1.0.1**
+* Automatic #Platform segment
+
 **1.0.0**
 * Automatic #NewUser event
 * Automatic #NewSession event
