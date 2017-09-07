@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using System.Collections;
 
-namespace Gametic
+namespace GameticSDK
 {
 	[RequireComponent(typeof(GameticRequestManager))]
 	public class GameticSDKManager : MonoBehaviour
@@ -50,7 +50,7 @@ namespace Gametic
 
 			SceneManager.activeSceneChanged += (Scene arg0, Scene arg1) => {
 				Dictionary<string, object> parameters = new Dictionary<string, object>();
-				parameters["FromScene"] = arg0.name;
+//				parameters["FromScene"] = arg0.name;
 				parameters["ToScene"] = arg1.name;
 				SendEventReq("#SceneChanged", parameters, true);
 			};
@@ -106,7 +106,9 @@ namespace Gametic
 		public void SendEvent(string eventName,
 			Dictionary<string, object> parameters,
 			bool tryAgainInCaseOfError = false){
-			SendEventReq (eventName, parameters, false, tryAgainInCaseOfError);
+			#if !UNITY_EDITOR || GAMETIC_DEBUG
+				SendEventReq (eventName, parameters, false, tryAgainInCaseOfError);
+			#endif
 		}
 
 		private void SendEventReq(string eventName,
@@ -123,26 +125,32 @@ namespace Gametic
 				eventJson.AddField("name", eventName);
 				JSONObject eventParametersJson = new JSONObject(JSONObject.Type.ARRAY);
 				foreach (var element in parameters) {
-					if (element.Value is string) {
-						JSONObject parameter = new JSONObject();
-						parameter.AddField("name", element.Key);
-						parameter.AddField("type", "string");
-						parameter.AddField("value", element.Value.ToString());
-						eventParametersJson.Add(parameter);
-					} else if ((element.Value is int) || (element.Value is long) || (element.Value is double) || (element.Value is float)) {
-						JSONObject parameter = new JSONObject();
-						parameter.AddField("name", element.Key);
-						parameter.AddField("type", "number");
-						parameter.AddField("value", element.Value.ToString());
-						eventParametersJson.Add(parameter);
-					} else if (element.Value is bool){
-						JSONObject parameter = new JSONObject();
-						parameter.AddField("name", element.Key);
-						parameter.AddField("type", "number");
-						parameter.AddField("value", (bool)element.Value? "1":"0");
-						eventParametersJson.Add(parameter);
-					}else {
-						Debug.LogError("Gametic: parameter '"+element.Key+"' has invalid type");
+					if (element.Value != null)
+						if (element.Value is string) {
+							JSONObject parameter = new JSONObject();
+							parameter.AddField("name", element.Key);
+							parameter.AddField("type", "string");
+							parameter.AddField("value", element.Value.ToString());
+							eventParametersJson.Add(parameter);
+						} else if ((element.Value is int) || (element.Value is long) || (element.Value is double) || (element.Value is float)) {
+							JSONObject parameter = new JSONObject();
+							parameter.AddField("name", element.Key);
+							parameter.AddField("type", "number");
+							parameter.AddField("value", element.Value.ToString());
+							eventParametersJson.Add(parameter);
+						} else if (element.Value is bool){
+							JSONObject parameter = new JSONObject();
+							parameter.AddField("name", element.Key);
+							parameter.AddField("type", "number");
+							parameter.AddField("value", (bool)element.Value? "1":"0");
+							eventParametersJson.Add(parameter);
+						}else {
+							Debug.LogError("Gametic: parameter '"+element.Key+"' has invalid type: "+element.Value.GetType().ToString());
+						}
+					else{
+						#if GAMETIC_DEBUG
+							Debug.LogError ("Gametic: parameter '"+element.Key+"' is null");
+						#endif
 					}
 				}
 				eventJson.AddField("parameters", eventParametersJson);
@@ -162,42 +170,46 @@ namespace Gametic
 		}
 
 		public void SendSegment(string segmentName, string segmentValue, bool tryAgainInCaseOfError = false){
-			try{
-				JSONObject json = new JSONObject();
-				json.AddField("developer_id", developerID);
-				json.AddField("project_name", projectName);
-				json.AddField("id", userId);
-				JSONObject segmentJson = new JSONObject();
-				segmentJson.AddField("name", segmentName);
-				segmentJson.AddField("propertyValue", segmentValue);
-				json.AddField("segment", segmentJson);
-				requestManager.Post("analytic/segments", json, tryAgainInCaseOfError, null);
-			#if GAMETIC_DEBUG
-			}catch (System.Exception e) {
-				Debug.LogError (e.Message);
-			}
-			#else
-			}catch{}
+			#if !UNITY_EDITOR || GAMETIC_DEBUG
+				try{
+					JSONObject json = new JSONObject();
+					json.AddField("developer_id", developerID);
+					json.AddField("project_name", projectName);
+					json.AddField("id", userId);
+					JSONObject segmentJson = new JSONObject();
+					segmentJson.AddField("name", segmentName);
+					segmentJson.AddField("propertyValue", segmentValue);
+					json.AddField("segment", segmentJson);
+					requestManager.Post("analytic/segments", json, tryAgainInCaseOfError, null);
+				#if GAMETIC_DEBUG
+				}catch (System.Exception e) {
+					Debug.LogError (e.Message);
+				}
+				#else
+				}catch{}
+				#endif
 			#endif
 		}
 			
 		public void SendPurchase(string market, int value, bool tryAgainInCaseOfError = true){
-			try{
-				Dictionary<string, object> parameters = new Dictionary<string, object>();
-				parameters["Market"] = market;
-				parameters["Count"] = value;
+			#if !UNITY_EDITOR || GAMETIC_DEBUG
+				try{
+					Dictionary<string, object> parameters = new Dictionary<string, object>();
+					parameters["Market"] = market;
+					parameters["Count"] = value;
 
-				parameters["Day"] = System.DateTime.Now.ToString("dd");
-				parameters["Hour"] = System.DateTime.Now.ToString("HH");
+					parameters["Day"] = System.DateTime.Now.ToString("dd");
+					parameters["Hour"] = System.DateTime.Now.ToString("HH");
 
-				SendEventReq("#Purchase", parameters, true, tryAgainInCaseOfError);
-				SendSegment("#Purchase", "Purchased", true);
-			#if GAMETIC_DEBUG
-			}catch (System.Exception e) {
-				Debug.LogError (e.Message);
-			}
-			#else
-			}catch{}
+					SendEventReq("#Purchase", parameters, true, tryAgainInCaseOfError);
+					SendSegment("#Purchase", "Purchased", true);
+				#if GAMETIC_DEBUG
+				}catch (System.Exception e) {
+					Debug.LogError (e.Message);
+				}
+				#else
+				}catch{}
+				#endif
 			#endif
 		}
 		#endregion

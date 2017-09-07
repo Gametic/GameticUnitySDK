@@ -2,24 +2,22 @@
 using UnityEngine;
 using System.Collections;
 
-namespace Gametic
+namespace GameticSDK
 {
 	public class GameticRequestManager : MonoBehaviour
 	{
 		[HideInInspector]
-		public string baseUrl = "http://api.gametic.ir";
-		[HideInInspector]
-		public int port = 4223;
+		public string baseUrl = "localhost:4223";//"http://api.gametic.ir";
 		public void Post(string uri, JSONObject json, bool tryAgainInCaseOfError, System.Action<JSONObject> callback = null)
 		{
-			string url = baseUrl + ":" + port + "/" + uri;
+			string url = baseUrl + "/" + uri;
 
 			var encoding = new System.Text.UTF8Encoding();
 	        var postHeader = new Dictionary<string, string>();
 	        postHeader.Add("Content-Type", "application/json");
 
 			#if GAMETIC_DEBUG
-			Debug.Log("Gametic Debug: try to post " + url + " | " + json);
+			Debug.LogWarning("Gametic Debug: try to post " + url + " | " + json);
 			#endif
 			StartCoroutine(SendingRequest(url, encoding.GetBytes(json.ToString()), postHeader, callback, tryAgainInCaseOfError));
 		}
@@ -36,6 +34,11 @@ namespace Gametic
 					{
 						msg = request.text;
 						msg = System.Text.RegularExpressions.Regex.Unescape(msg);
+
+						#if GAMETIC_DEBUG
+						Debug.LogWarning("GameticSDK: "+msg);
+						#endif
+
 						JSONObject json = new JSONObject(msg);
 						if (callback == null){
 //							#if GAMETIC_DEBUG

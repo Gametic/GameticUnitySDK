@@ -4,7 +4,7 @@ using System.Collections;
 //using System.Diagnostics;
 using System.Text;
 
-namespace Gametic
+namespace GameticSDK
 {
 
 	public class JSONObject
