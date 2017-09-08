@@ -12,6 +12,10 @@ Import
 
 ![Import](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/Import.png)
 
+Example
+---------
+See [UnityDemo](https://github.com/Gametic/UnityDemo) project.
+
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
