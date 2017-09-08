@@ -1,5 +1,5 @@
 # GameticUnitySDK
-The Gametic SDK for tracking event in Unity.
+The Gametic SDK for tracking your unity project.
 
 Import
 ---------
@@ -11,6 +11,10 @@ Import
 6. Click `Import` button
 
 ![Import](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/Import.png)
+
+Example
+---------
+See [UnityDemo](https://github.com/Gametic/UnityDemo) project.
 
 Changelog
 ---------
