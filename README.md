@@ -5,7 +5,7 @@ Import
 ---------
 1. Goto the [Releases](https://github.com/Gametic/GameticUnitySDK/releases) Page
 2. Download latest release GameticUnitySDK.unitypackage
-3. Open your project in unity
+3. Open your unity project
 4. Open (Double Click) downloaded GameticUnitySDK.unitypackage
 5. Click `All` button
 6. Click `Import` button
