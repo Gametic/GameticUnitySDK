@@ -1,6 +1,17 @@
 # GameticUnitySDK
 The Gametic SDK for tracking event in Unity.
 
+Import
+---------
+1. Goto the [Releases](https://github.com/Gametic/GameticUnitySDK/releases) Page
+2. Download latest release GameticUnitySDK.unitypackage
+3. Open your project in unity
+4. Open (Double Click) downloaded GameticUnitySDK.unitypackage
+5. Click `All` button
+6. Click `Import` button
+
+![Import](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/Import.png)
+
 Changelog
 ---------
 <!--(CHANGELOG_TOP)-->
