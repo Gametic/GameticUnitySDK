@@ -1,5 +1,5 @@
 # GameticUnitySDK
-The Gametic SDK for tracking event in Unity.
+The Gametic SDK for tracking your unity project.
 
 Import
 ---------
