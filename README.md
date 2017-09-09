@@ -12,6 +12,29 @@ Import
 
 ![Import](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/Import.png)
 
+Usage
+---------
+1. Import GameticSDK:
+```csharp 
+using GameticSDK;
+```
+3. Send your custom events:
+ ```csharp
+ Gametic.CustomEvent("GameLevelComplete", new Dictionary<string, object> {
+    { "Coin", 1234 },
+    { "LevelName",  "asdf" },
+    { "Won",  false },
+  });
+ ```
+4. Send your custom segments:
+ ```csharp
+ Gametic.CustomSegment ("Gender", "Male");
+ ```
+5. Send your purchase events:
+```csharp
+Gametic.Purchase ("Cafebazaar", creditsToAdd);
+```
+
 Example
 ---------
 See [UnityDemo](https://github.com/Gametic/UnityDemo) project.
