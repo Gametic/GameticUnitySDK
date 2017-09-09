@@ -37,7 +37,10 @@ namespace GameticSDK
 				return;
 			}
 
+			Debug.Log ("Gametic Start Tracking");
+
 			#if !UNITY_EDITOR || GAMETIC_DEBUG
+
 			if (!sessionSentOnce){
 				if (!PlayerPrefs.HasKey("GameticUserId")){
 					NewUser();
@@ -47,7 +50,6 @@ namespace GameticSDK
 				}
 				sessionSentOnce = true;
 			}
-
 			SceneManager.activeSceneChanged += (Scene arg0, Scene arg1) => {
 				Dictionary<string, object> parameters = new Dictionary<string, object>();
 //				parameters["FromScene"] = arg0.name;
@@ -56,7 +58,6 @@ namespace GameticSDK
 			};
 
 			SendDefaultSegments();
-
 			#endif
 		}
 			

@@ -6,8 +6,7 @@ namespace GameticSDK
 {
 	public class GameticRequestManager : MonoBehaviour
 	{
-		[HideInInspector]
-		public string baseUrl = "localhost:4223";//"http://api.gametic.ir";
+		private string baseUrl = "http://api.gametic.ir";
 		public void Post(string uri, JSONObject json, bool tryAgainInCaseOfError, System.Action<JSONObject> callback = null)
 		{
 			string url = baseUrl + "/" + uri;
