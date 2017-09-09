@@ -26,23 +26,28 @@ Import
 
 Usage
 ---------
-1. Import GameticSDK:
+1. Import GameticUnitySDK.unitypackage
+2. Right click in Hierarchy section and click on `Gametic > Add SDK Manager`
+![AddSDK](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/AddSDK.png)
+4. Fill `Developer ID` and `Project Name` Field
+![SDKManager](https://raw.githubusercontent.com/Gametic/GameticUnitySDK/master/Images/SDKManager.png)
+3. Import GameticSDK in your script:
 ```csharp 
 using GameticSDK;
 ```
-3. Send your custom events:
- ```csharp
- Gametic.CustomEvent("GameLevelComplete", new Dictionary<string, object> {
-    { "Coin", 1234 },
-    { "LevelName",  "asdf" },
-    { "Won",  false },
-  });
- ```
-4. Send your custom segments:
- ```csharp
- Gametic.CustomSegment ("Gender", "Male");
- ```
-5. Send your purchase events:
+4. Send your custom events:
+```csharp
+Gametic.CustomEvent("GameLevelComplete", new Dictionary<string, object> {
+{ "Coin", 1234 },
+{ "LevelName",  "asdf" },
+{ "Won",  false },
+});
+```
+5. Send your custom segments:
+```csharp
+Gametic.CustomSegment ("Gender", "Male");
+```
+6. Send your purchase events:
 ```csharp
 Gametic.Purchase ("Cafebazaar", creditsToAdd);
 ```
