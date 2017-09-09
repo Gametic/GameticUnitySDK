@@ -1,6 +1,18 @@
 # GameticUnitySDK
 The Gametic SDK for tracking your unity project.
 
+Features
+---------
+* Automatically Track Your `New User`
+* Automatically Track `New Session`
+* Automatically Track `Scene Change`
+* Automatically Send `Platform`
+* Automatically Send `Version`
+* Automatically Send `Activation` Segment
+* Can Send `Purchase Event`
+* Can Send `Custom Event`
+* Can Send `Custom Segment`
+
 Import
 ---------
 1. Goto the [Releases](https://github.com/Gametic/GameticUnitySDK/releases) Page
